@@ -1,0 +1,44 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Tweet created:</strong>
+  <%= @trump_tweet.tweet_created %>
+</p>
+
+<p>
+  <strong>Tweet text:</strong>
+  <%= @trump_tweet.tweet_text %>
+</p>
+
+<p>
+  <strong>Tweet is rt:</strong>
+  <%= @trump_tweet.tweet_is_rt %>
+</p>
+
+<p>
+  <strong>Tweet in reply to screenname:</strong>
+  <%= @trump_tweet.tweet_in_reply_to_screenname %>
+</p>
+
+<p>
+  <strong>Tweet fav count:</strong>
+  <%= @trump_tweet.tweet_fav_count %>
+</p>
+
+<p>
+  <strong>Tweet rt count:</strong>
+  <%= @trump_tweet.tweet_rt_count %>
+</p>
+
+<p>
+  <strong>Tweet source:</strong>
+  <%= @trump_tweet.tweet_source %>
+</p>
+
+<p>
+  <strong>Tweet id string:</strong>
+  <%= @trump_tweet.tweet_id_string %>
+</p>
+
+<%= link_to 'Edit', edit_trump_tweet_path(@trump_tweet) %> |
+<%= link_to 'Back', trump_tweets_path %>

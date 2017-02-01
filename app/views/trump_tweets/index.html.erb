@@ -1,0 +1,41 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Trump Tweets</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Tweet created</th>
+      <th>Tweet text</th>
+      <th>Tweet is rt</th>
+      <th>Tweet in reply to screenname</th>
+      <th>Tweet fav count</th>
+      <th>Tweet rt count</th>
+      <th>Tweet source</th>
+      <th>Tweet id string</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @trump_tweets.each do |trump_tweet| %>
+      <tr>
+        <td><%= trump_tweet.tweet_created %></td>
+        <td><%= trump_tweet.tweet_text %></td>
+        <td><%= trump_tweet.tweet_is_rt %></td>
+        <td><%= trump_tweet.tweet_in_reply_to_screenname %></td>
+        <td><%= trump_tweet.tweet_fav_count %></td>
+        <td><%= trump_tweet.tweet_rt_count %></td>
+        <td><%= trump_tweet.tweet_source %></td>
+        <td><%= trump_tweet.tweet_id_string %></td>
+        <td><%= link_to 'Show', trump_tweet %></td>
+        <td><%= link_to 'Edit', edit_trump_tweet_path(trump_tweet) %></td>
+        <td><%= link_to 'Destroy', trump_tweet, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Trump Tweet', new_trump_tweet_path %>

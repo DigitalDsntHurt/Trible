@@ -1,0 +1,14 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Verse num:</strong>
+  <%= @bible_verse.verse_num %>
+</p>
+
+<p>
+  <strong>Verse text:</strong>
+  <%= @bible_verse.verse_text %>
+</p>
+
+<%= link_to 'Edit', edit_bible_verse_path(@bible_verse) %> |
+<%= link_to 'Back', bible_verses_path %>

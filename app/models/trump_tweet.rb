@@ -1,0 +1,2 @@
+class TrumpTweet < ApplicationRecord
+end

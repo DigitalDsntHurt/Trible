@@ -1,0 +1,2 @@
+json.extract! trump_tweet, :id, :tweet_created, :tweet_text, :tweet_is_rt, :tweet_in_reply_to_screenname, :tweet_fav_count, :tweet_rt_count, :tweet_source, :tweet_id_string, :created_at, :updated_at
+json.url trump_tweet_url(trump_tweet, format: :json)

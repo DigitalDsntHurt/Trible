@@ -1,0 +1,21 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  tweet_created: MyString
+  tweet_text: MyString
+  tweet_is_rt: MyString
+  tweet_in_reply_to_screenname: MyString
+  tweet_fav_count: 1
+  tweet_rt_count: 1
+  tweet_source: MyString
+  tweet_id_string: MyString
+
+two:
+  tweet_created: MyString
+  tweet_text: MyString
+  tweet_is_rt: MyString
+  tweet_in_reply_to_screenname: MyString
+  tweet_fav_count: 1
+  tweet_rt_count: 1
+  tweet_source: MyString
+  tweet_id_string: MyString

@@ -1,0 +1,1 @@
+json.partial! "mashups/mashup", mashup: @mashup

@@ -1,0 +1,2 @@
+class Mashup < ApplicationRecord
+end
