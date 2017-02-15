@@ -21,9 +21,10 @@ ActiveRecord::Schema.define(version: 20170201192305) do
 
   create_table "mashups", force: :cascade do |t|
     t.string   "mashup_text"
-    t.boolean  "keep?"
-    t.datetime "created_at",  null: false
-    t.datetime "updated_at",  null: false
+    t.boolean  "tweet?",      default: false
+    t.boolean  "tweeted?",    default: false
+    t.datetime "created_at",                  null: false
+    t.datetime "updated_at",                  null: false
   end
 
   create_table "trump_tweets", force: :cascade do |t|

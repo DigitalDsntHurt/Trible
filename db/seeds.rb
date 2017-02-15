@@ -1,3 +1,5 @@
+start = Time.now
+
 require 'csv'
 
 ############ Human Input #############
@@ -21,7 +23,7 @@ if trump_tweets == true
 		TrumpTweet.create!( @hsh )
 	}
 end
-
+puts "App took #{Time.now-start} seconds to seed Trump Tweets"
 
 ##
 #### Seed Bible Verses
@@ -34,7 +36,7 @@ if bible_verses == true
 		BibleVerse.create!( @hsh )
 	}
 end
-
+puts "App took #{Time.now-start} seconds to seed Trump Tweets + Bible Verses"
 
 ##
 #### Mashup
@@ -79,6 +81,7 @@ if mashup == true
 		Mashup.create!( :mashup_text => tweet_first[rand(tweet_first.length)].join )
 		Mashup.create!( :mashup_text => verse_first[rand(verse_first.length)].join )
 	end
+	puts "App took #{(Time.now-start)/60} minutes to create 50 colon sep mashups"
 
 	puts "============\n\n~~~~~~  Mashup Method 2 -- Semi-colon separated ~~~~~~\n\n============"
 	# Separate verses by question mark and store the short ones
@@ -112,17 +115,6 @@ if mashup == true
 		after_mixed_punc_tweets << @after_last_punc.gsub("&amp;","&") unless @after_last_punc.start_with?("://") or @after_last_punc.start_with?("//") or @after_last_punc.length < 5 or @before_first_punc.start_with?("\"@") or @before_first_punc.start_with?("@")#.gsub(/(?:f|ht)tps?:\/[^\s]+/,"") #if @after_colon.gsub(/(?:f|ht)tps?:\/[^\s]+/,"").length < 51 #&& @after_colon.length > 17
 	}
 
-	#before_mixed_punc_tweets.each{|ht|
-	#	p ht
-	#}
-	#after_mixed_punc_tweets.each{|ht|
-	#	puts ht
-	#}
-
-#	p before_mixed_punc_tweets.count
-#	p after_mixed_punc_tweets.count
-
-
 	tweet_first = before_mixed_punc_tweets.product(after_sc_verses)
 	verse_first = before_sc_verses.product(after_mixed_punc_tweets)
 
@@ -134,3 +126,5 @@ if mashup == true
 	end
 
 end
+
+puts "App took #{(Time.now-start)/60} minutes to seed 50 semi col Mashups"
