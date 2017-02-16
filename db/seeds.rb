@@ -22,8 +22,9 @@ if trump_tweets == true
 		@hsh = { :tweet_created => row[5], :tweet_text => row[2], :tweet_is_rt => row[4], :tweet_in_reply_to_screenname => row[3], :tweet_fav_count => row[0] , :tweet_rt_count => row[6], :tweet_source => row[1], :tweet_id_string => row[-1] }
 		TrumpTweet.create!( @hsh )
 	}
+	puts "App took #{Time.now-start} seconds to seed Trump Tweets"
 end
-puts "App took #{Time.now-start} seconds to seed Trump Tweets"
+
 
 ##
 #### Seed Bible Verses
@@ -35,8 +36,8 @@ if bible_verses == true
 		@hsh = { :verse_num => row[0], :verse_text => row[1] }
 		BibleVerse.create!( @hsh )
 	}
+	puts "App took #{Time.now-start} seconds to seed Trump Tweets + Bible Verses"
 end
-puts "App took #{Time.now-start} seconds to seed Trump Tweets + Bible Verses"
 
 ##
 #### Mashup
@@ -89,7 +90,6 @@ if mashup == true
 	after_sc_verses = []
 	# Select verses w/ colons
 	verses_w_scs = @verses.select{|v| v.verse_text.include?(";") }
-	p verses_w_scs.count
 
 	verses_w_scs.each{|v| 
 		@sc_index = v.verse_text.index(";")
