@@ -1,6 +1,6 @@
 class MashupsController < ApplicationController
   before_action :set_mashup, only: [:show, :edit, :update, :destroy]
-  http_basic_authenticate_with name: "citizen", password: "resist"
+  http_basic_authenticate_with name: ENV['MASHUPS_ADMIN_UNAME'], password: ENV['MASHUPS_ADMIN_PASS']
   # GET /mashups
   # GET /mashups.json
   def index
