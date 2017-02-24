@@ -1,6 +1,6 @@
 class MashupsController < ApplicationController
   before_action :set_mashup, only: [:show, :edit, :update, :destroy]
-
+  http_basic_authenticate_with name: "citizen", password: "resist"
   # GET /mashups
   # GET /mashups.json
   def index
@@ -77,4 +77,5 @@ class MashupsController < ApplicationController
     def mashup_params
       params.require(:mashup).permit(:index)
     end
+
 end
