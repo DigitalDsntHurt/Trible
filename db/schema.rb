@@ -12,6 +12,9 @@
 
 ActiveRecord::Schema.define(version: 20170201192305) do
 
+  # These are extensions that must be enabled in order to support this database
+  enable_extension "plpgsql"
+
   create_table "bible_verses", force: :cascade do |t|
     t.string   "verse_num"
     t.string   "verse_text"

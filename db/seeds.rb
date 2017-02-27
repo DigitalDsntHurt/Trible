@@ -8,9 +8,11 @@ require 'csv'
 	trump_tweets = true 			##
 	bible_verses = true				##									
 	mashup = true 					##
+	debug = false					##
 ## 									##
 ## 									##
 ########## End Human Input ###########
+
 
 ##
 #### Seed Trump Tweets
@@ -128,3 +130,7 @@ if mashup == true
 end
 
 puts "App took #{(Time.now-start)/60} minutes to seed 50 semi col Mashups"
+
+if debug == true
+	puts "App took #{(Time.now-start)/60} minutes to run debug"
+end

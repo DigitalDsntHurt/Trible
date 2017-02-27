@@ -3,6 +3,21 @@
 <h1>Mashups</h1>
 
 <table>
+  <tr>
+    <td>
+      <%= button_to "Generate New Mashups", {:controller => "mashups", :action => "generate_new_mashups"}, :method=>:put %>
+    </td>
+    <td>
+      <%= button_to "Clear Non-Queued Mashups", {:controller => "mashups", :action => "clear_unqueued_mashups"}, :method=>:post %>
+    </td>
+    <td>
+      <%= button_to "Clear All Mashups", {:controller => "mashups", :action => "clear_all_mashups"}, :method=>:post %>
+    </td>
+  </tr>  
+</table>
+
+
+<table>
   <thead>
     <tr>
       <th>Mashup Text</th>
