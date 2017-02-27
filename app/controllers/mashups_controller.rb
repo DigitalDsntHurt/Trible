@@ -169,7 +169,7 @@ class MashupsController < ApplicationController
       ###### ###### ###### 
       @verses = BibleVerse.all.to_a.select!{ |record| record.verse_num.start_with?(rand(1..66).to_s) }
       @tweets = TrumpTweet.all.to_a
-      
+
       # Separate verses by question mark and store the short ones
       before_sc_verses = []
       after_sc_verses = []
@@ -206,8 +206,8 @@ class MashupsController < ApplicationController
       50.times do 
         #p tweet_first[rand(tweet_first.length)].join
         #p verse_first[rand(verse_first.length)].join
-        Mashup.create!( :mashup_text => tweet_first[rand(tweet_first.length)].join )
-        Mashup.create!( :mashup_text => verse_first[rand(verse_first.length)].join )
+        Mashup.create!( :mashup_text => tweet_first[rand(tweet_first.length)].join.gsub("\"","").gsub(";-"," -") )
+        Mashup.create!( :mashup_text => verse_first[rand(verse_first.length)].join.gsub("\"","").gsub(";-"," -") )
       end
 
 
