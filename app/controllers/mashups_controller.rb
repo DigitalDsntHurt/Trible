@@ -71,106 +71,8 @@ class MashupsController < ApplicationController
     @verses = BibleVerse.all.to_a.select!{ |record| record.verse_num.start_with?(rand(1..66).to_s) }
     @tweets = TrumpTweet.all.to_a
 
-    before_sc_verses = []
-    after_sc_verses = []
-    # Select verses & tweets which include ";" ";" "!" "?" "--" "and"
-    verses_w_punc = @verses.select{|v| v.verse_text.include?(";") or v.verse_text.include?(":") or v.verse_text.include?("!") or v.verse_text.include?("?") or v.verse_text.include?("--") } # or v.verse_text.include?(" and ")
-    tweets_w_punc = @tweets.select{ |tw| tw.tweet_text.include?(";") or tw.tweet_text.include?(":") or tw.tweet_text.include?("!") or tw.tweet_text.include?("?") or tw.tweet_text.include?("--") } # or tw.tweet_text.include?(" and ")
-    
-    # Get fronts & backs of TWEETS
-    before_first_punc_tweets = []
-    after_last_punc_tweets = []
-    tweets_w_punc.each{|tw|
-      # Fronts
-      @first_punc_index = [ tw.tweet_text.index(":"), tw.tweet_text.index(";"), tw.tweet_text.index("!"), tw.tweet_text.index("?"), tw.tweet_text.index("--"), tw.tweet_text.index(" and ") ].reject{|item| item == nil }.sort.first
-      @before_first_punc = tw.tweet_text[0..@first_punc_index]
-    before_first_punc_tweets << @before_first_punc unless @before_first_punc == nil or @before_first_punc.length < 5 or @before_first_punc.length > 85
-    # Backs
-    @last_punc_index = [ tw.tweet_text.index(":"), tw.tweet_text.index(";"), tw.tweet_text.index("!"), tw.tweet_text.index("?"), tw.tweet_text.index("--"), tw.tweet_text.index(" and ") ].reject{|item| item == nil }.sort[-1]
-      @after_last_punc = tw.tweet_text[(@last_punc_index+1)..-1].strip
-      after_last_punc_tweets << @after_last_punc unless @after_last_punc == nil or @after_last_punc.include?("//") or @after_last_punc.length < 5 or @after_last_punc.length > 85
-    }
-
-    # Get fronts & backs of VERSES
-    before_first_punc_verses = []
-    after_last_punc_verses = []
-    verses_w_punc.each{|v|
-      # Fronts
-      @first_punc_index = [ v.verse_text.index(":"), v.verse_text.index(";"), v.verse_text.index("!"), v.verse_text.index("?"), v.verse_text.index("--"), v.verse_text.index(" and ") ].reject{|item| item == nil }.sort.first
-      @before_first_punc = v.verse_text[0..@first_punc_index]
-    before_first_punc_verses << @before_first_punc unless @before_first_punc == nil or @before_first_punc.length < 5 or @before_first_punc.length > 85
-    # Backs
-    @last_punc_index = [ v.verse_text.index(":"), v.verse_text.index(";"), v.verse_text.index("!"), v.verse_text.index("?"), v.verse_text.index("--"), v.verse_text.index(" and ") ].reject{|item| item == nil }.sort[-1]
-      @after_last_punc = v.verse_text[(@last_punc_index+1)..-1].strip
-    after_last_punc_verses << @after_last_punc unless @after_last_punc == nil or @after_last_punc.length < 5 or @after_last_punc.length > 85
-    }
-
-    tweet_first = before_first_punc_tweets.product(after_last_punc_verses)#.reject!{|mash| mash.join.strip.length > 140}
-    verse_first = before_first_punc_verses.product(after_last_punc_tweets)#.reject!{|mash| mash.join.strip.length > 140}
-
-    100.times do 
-      tf = tweet_first[rand(0..tweet_first.length)]
-      if tf[0][-1] == "!" or tf[0][-1] == "?"
-        newmash = tf[0] + " " + tf[1].capitalize
-      else
-        newmash = p tf[0] + " " + tf[1]
-      end
-      Mashup.create!(:mashup_text => newmash.gsub("\"","")) unless newmash == nil or newmash.length > 140
-
-      vf = verse_first[rand(0..verse_first.length)]
-      if vf[0][-1] == "!" or vf[0][-1] == "?"
-        newmash = p vf[0] + " " + vf[1].capitalize
-      else 
-        newmash = p vf[0] + " " + vf[1]
-      end
-      Mashup.create!(:mashup_text => newmash.gsub("\"","")) unless newmash == nil or newmash.length > 140
-
-
-      ###### ###### ###### 
-
-      @verses = BibleVerse.all.to_a.select!{ |record| record.verse_num.start_with?(rand(1..66).to_s) }
-      @tweets = TrumpTweet.all.to_a
-
-      # Separate verses by colon and store the short ones
-      before_colon_verses = []
-      after_colon_verses = []
-      # Select verses w/ colons
-      verses_w_colons = @verses.select{|v| v.verse_text.include?(":") }
-      verses_w_colons.each{|v| 
-        @colon_index = v.verse_text.index(":")
-        @before_colon = v.verse_text[0..@colon_index]
-        @after_colon = v.verse_text[(@colon_index+1)..-1]
-        # Only add the short ones!
-        before_colon_verses << @before_colon.gsub("&amp;","&") if @before_colon.length < 91
-        after_colon_verses << @after_colon.gsub("&amp;","&") if @after_colon.length < 91
-      }
-
-      # Separate tweets by colon and store the short ones
-      before_colon_tweets = []
-      after_colon_tweets = []
-      @tweets_with_colons = @tweets.select{ |tw| tw.tweet_text.include?(":") }#.reject{|t|  t.tweet_text.include?("@") }.reject{|t|  t.tweet_text.include?("http://") }
-      @tweets_with_colons.each{|tw|
-        @colon_index = tw.tweet_text.index(":")
-        @before_colon = tw.tweet_text[0..@colon_index]
-        @after_colon = tw.tweet_text[(@colon_index+1)..-1]
-        # Only add the short ones!
-        before_colon_tweets << @before_colon.gsub("&amp;","&") if @before_colon.length < 51
-        after_colon_tweets << @after_colon.gsub(/(?:f|ht)tps?:\/[^\s]+/,"").gsub("&amp;","&") if @after_colon.gsub(/(?:f|ht)tps?:\/[^\s]+/,"").length < 51 #&& @after_colon.length > 17
-      }
-
-      tweet_first = before_colon_tweets.reject{|t|  t.length < 33 }.map{|t| t.gsub(" http:", " ") }.map{|t| t.gsub("https:", ": ") }.map{|t| t.gsub("\"","") }.product(after_colon_verses.reject{|t|  t.length < 33 }.map{|t| t.gsub(" http:", " ") }.map{|t| t.gsub("https:", ": ") }.map{|t| t.gsub("\"","") })
-      verse_first = before_colon_verses.reject{|t|  t.length < 33 }.map{|t| t.gsub(" http:", " ") }.map{|t| t.gsub("https:", ": ") }.map{|t| t.gsub("\"","") }.product(after_colon_tweets.reject{|t|  t.length < 33 }.map{|t| t.gsub(" http:", " ") }.map{|t| t.gsub("https:", ": ") }.map{|t| t.gsub("\"","") })
-
-      50.times do 
-        Mashup.create!( :mashup_text => tweet_first[rand(tweet_first.length)].join )
-        Mashup.create!( :mashup_text => verse_first[rand(verse_first.length)].join )
-      end
-      
-      ###### ###### ###### 
-
-      @verses = BibleVerse.all.to_a.select!{ |record| record.verse_num.start_with?(rand(1..66).to_s) }
-      @tweets = TrumpTweet.all.to_a
-
+    selector = rand(0..1)
+    if selector == 0
       # Separate verses by question mark and store the short ones
       before_sc_verses = []
       after_sc_verses = []
@@ -211,10 +113,108 @@ class MashupsController < ApplicationController
         Mashup.create!( :mashup_text => verse_first[rand(verse_first.length)].join.gsub("\"","").gsub(";-"," -") )
       end
 
+      # Separate verses by colon and store the short ones
+      before_colon_verses = []
+      after_colon_verses = []
+      # Select verses w/ colons
+      verses_w_colons = @verses.select{|v| v.verse_text.include?(":") }
+      verses_w_colons.each{|v| 
+        @colon_index = v.verse_text.index(":")
+        @before_colon = v.verse_text[0..@colon_index]
+        @after_colon = v.verse_text[(@colon_index+1)..-1]
+        # Only add the short ones!
+        before_colon_verses << @before_colon.gsub("&amp;","&") if @before_colon.length < 91
+        after_colon_verses << @after_colon.gsub("&amp;","&") if @after_colon.length < 91
+      }
 
-      redirect_to(:action => "index") and return
+      # Separate tweets by colon and store the short ones
+      before_colon_tweets = []
+      after_colon_tweets = []
+      @tweets_with_colons = @tweets.select{ |tw| tw.tweet_text.include?(":") }#.reject{|t|  t.tweet_text.include?("@") }.reject{|t|  t.tweet_text.include?("http://") }
+      @tweets_with_colons.each{|tw|
+        @colon_index = tw.tweet_text.index(":")
+        @before_colon = tw.tweet_text[0..@colon_index]
+        @after_colon = tw.tweet_text[(@colon_index+1)..-1]
+        # Only add the short ones!
+        before_colon_tweets << @before_colon.gsub("&amp;","&") if @before_colon.length < 51
+        after_colon_tweets << @after_colon.gsub(/(?:f|ht)tps?:\/[^\s]+/,"").gsub("&amp;","&") if @after_colon.gsub(/(?:f|ht)tps?:\/[^\s]+/,"").length < 51 #&& @after_colon.length > 17
+      }
+
+      tweet_first = before_colon_tweets.reject{|t|  t.length < 33 }.map{|t| t.gsub(" http:", " ") }.map{|t| t.gsub("https:", ": ") }.map{|t| t.gsub("\"","") }.product(after_colon_verses.reject{|t|  t.length < 33 }.map{|t| t.gsub(" http:", " ") }.map{|t| t.gsub("https:", ": ") }.map{|t| t.gsub("\"","") })
+      verse_first = before_colon_verses.reject{|t|  t.length < 33 }.map{|t| t.gsub(" http:", " ") }.map{|t| t.gsub("https:", ": ") }.map{|t| t.gsub("\"","") }.product(after_colon_tweets.reject{|t|  t.length < 33 }.map{|t| t.gsub(" http:", " ") }.map{|t| t.gsub("https:", ": ") }.map{|t| t.gsub("\"","") })
+
+      50.times do 
+        Mashup.create!( :mashup_text => tweet_first[rand(tweet_first.length)].join )
+        Mashup.create!( :mashup_text => verse_first[rand(verse_first.length)].join )
+      end
+
+    else
+      before_sc_verses = []
+      after_sc_verses = []
+      # Select verses & tweets which include ";" ";" "!" "?" "--" "and"
+      verses_w_punc = @verses.select{|v| v.verse_text.include?(";") or v.verse_text.include?(":") or v.verse_text.include?("!") or v.verse_text.include?("?") or v.verse_text.include?("--") } # or v.verse_text.include?(" and ")
+      tweets_w_punc = @tweets.select{ |tw| tw.tweet_text.include?(";") or tw.tweet_text.include?(":") or tw.tweet_text.include?("!") or tw.tweet_text.include?("?") or tw.tweet_text.include?("--") } # or tw.tweet_text.include?(" and ")
+      
+      # Get fronts & backs of TWEETS
+      before_first_punc_tweets = []
+      after_last_punc_tweets = []
+      tweets_w_punc.each{|tw|
+        # Fronts
+        @first_punc_index = [ tw.tweet_text.index(":"), tw.tweet_text.index(";"), tw.tweet_text.index("!"), tw.tweet_text.index("?"), tw.tweet_text.index("--"), tw.tweet_text.index(" and ") ].reject{|item| item == nil }.sort.first
+        @before_first_punc = tw.tweet_text[0..@first_punc_index]
+      before_first_punc_tweets << @before_first_punc unless @before_first_punc == nil or @before_first_punc.length < 5 or @before_first_punc.length > 85
+      # Backs
+      @last_punc_index = [ tw.tweet_text.index(":"), tw.tweet_text.index(";"), tw.tweet_text.index("!"), tw.tweet_text.index("?"), tw.tweet_text.index("--"), tw.tweet_text.index(" and ") ].reject{|item| item == nil }.sort[-1]
+        @after_last_punc = tw.tweet_text[(@last_punc_index+1)..-1].strip
+        after_last_punc_tweets << @after_last_punc unless @after_last_punc == nil or @after_last_punc.include?("//") or @after_last_punc.length < 5 or @after_last_punc.length > 85
+      }
+
+      # Get fronts & backs of VERSES
+      before_first_punc_verses = []
+      after_last_punc_verses = []
+      verses_w_punc.each{|v|
+        # Fronts
+        @first_punc_index = [ v.verse_text.index(":"), v.verse_text.index(";"), v.verse_text.index("!"), v.verse_text.index("?"), v.verse_text.index("--"), v.verse_text.index(" and ") ].reject{|item| item == nil }.sort.first
+        @before_first_punc = v.verse_text[0..@first_punc_index]
+      before_first_punc_verses << @before_first_punc unless @before_first_punc == nil or @before_first_punc.length < 5 or @before_first_punc.length > 85
+      # Backs
+      @last_punc_index = [ v.verse_text.index(":"), v.verse_text.index(";"), v.verse_text.index("!"), v.verse_text.index("?"), v.verse_text.index("--"), v.verse_text.index(" and ") ].reject{|item| item == nil }.sort[-1]
+        @after_last_punc = v.verse_text[(@last_punc_index+1)..-1].strip
+      after_last_punc_verses << @after_last_punc unless @after_last_punc == nil or @after_last_punc.length < 5 or @after_last_punc.length > 85
+      }
+
+      tweet_first = before_first_punc_tweets.product(after_last_punc_verses)#.reject!{|mash| mash.join.strip.length > 140}
+      verse_first = before_first_punc_verses.product(after_last_punc_tweets)#.reject!{|mash| mash.join.strip.length > 140}
+
+      150.times do 
+        tf = tweet_first[rand(0..tweet_first.length)]
+        if tf[0][-1] == "!" or tf[0][-1] == "?"
+          newmash = tf[0] + " " + tf[1].capitalize
+        else
+          newmash = p tf[0] + " " + tf[1]
+        end
+        Mashup.create!(:mashup_text => newmash.gsub("\"","")) unless newmash == nil or newmash.length > 140
+
+        vf = verse_first[rand(0..verse_first.length)]
+        if vf[0][-1] == "!" or vf[0][-1] == "?"
+          newmash = p vf[0] + " " + vf[1].capitalize
+        else 
+          newmash = p vf[0] + " " + vf[1]
+        end
+        Mashup.create!(:mashup_text => newmash.gsub("\"","")) unless newmash == nil or newmash.length > 140
     end
 
+      ###### ###### ###### 
+
+#      @verses = BibleVerse.all.to_a.select!{ |record| record.verse_num.start_with?(rand(1..66).to_s) }
+#      @tweets = TrumpTweet.all.to_a
+      
+      ###### ###### ###### 
+
+#      @verses = BibleVerse.all.to_a.select!{ |record| record.verse_num.start_with?(rand(1..66).to_s) }
+#      @tweets = TrumpTweet.all.to_a  
+    end
+    redirect_to(:action => "index") and return
   end #generate_new_mashups
 
   def clear_unqueued_mashups
