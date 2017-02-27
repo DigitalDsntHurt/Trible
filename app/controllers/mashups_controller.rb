@@ -108,7 +108,7 @@ class MashupsController < ApplicationController
     tweet_first = before_first_punc_tweets.product(after_last_punc_verses)#.reject!{|mash| mash.join.strip.length > 140}
     verse_first = before_first_punc_verses.product(after_last_punc_tweets)#.reject!{|mash| mash.join.strip.length > 140}
 
-    2000.times do 
+    100.times do 
       tf = tweet_first[rand(0..tweet_first.length)]
       if tf[0][-1] == "!" or tf[0][-1] == "?"
         newmash = tf[0] + " " + tf[1].capitalize
@@ -167,6 +167,7 @@ class MashupsController < ApplicationController
       end
       
       ###### ###### ###### 
+
       @verses = BibleVerse.all.to_a.select!{ |record| record.verse_num.start_with?(rand(1..66).to_s) }
       @tweets = TrumpTweet.all.to_a
 
